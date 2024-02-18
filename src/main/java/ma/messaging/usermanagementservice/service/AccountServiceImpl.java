@@ -2,8 +2,12 @@ package ma.messaging.usermanagementservice.service;
 
 import ma.messaging.usermanagementservice.model.Account;
 import ma.messaging.usermanagementservice.repository.AccountRepository;
+import ma.messaging.usermanagementservice.user.login.LoginRequest;
+import ma.messaging.usermanagementservice.user.login.LoginResponse;
 import ma.messaging.usermanagementservice.user.register.RegisterRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -28,5 +32,15 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
 
         return true;
+    }
+
+    public LoginResponse login(LoginRequest request) {
+        Optional<Account> user = accountRepository.findById(request.getUsername());
+
+        if (user.isEmpty()) return LoginResponse.NON_EXISTENT_ACCOUNT;
+        else if (!user.get().getPassword().equals(request.getPassword()))
+            return LoginResponse.WRONG_CREDENTIALS;
+
+        return LoginResponse.LOGGED_IN;
     }
 }

@@ -1,6 +1,8 @@
 package ma.messaging.usermanagementservice.controller;
 
 import ma.messaging.usermanagementservice.service.AccountService;
+import ma.messaging.usermanagementservice.user.login.LoginRequest;
+import ma.messaging.usermanagementservice.user.login.LoginResponse;
 import ma.messaging.usermanagementservice.user.register.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,5 +30,15 @@ public class AuthController {
             return new ResponseEntity<>("success", HttpStatus.OK);
 
         return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> userLogin(@RequestBody LoginRequest request) {
+        LoginResponse response = accountService.login(request);
+
+        if (response.equals(LoginResponse.NON_EXISTENT_ACCOUNT) || response.equals(LoginResponse.WRONG_CREDENTIALS))
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

@@ -5,6 +5,7 @@ import ma.messaging.usermanagementservice.repository.AccountRepository;
 import ma.messaging.usermanagementservice.user.login.LoginRequest;
 import ma.messaging.usermanagementservice.user.login.LoginResponse;
 import ma.messaging.usermanagementservice.user.register.RegisterRequest;
+import ma.messaging.usermanagementservice.user.register.RegisterResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,8 +20,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-    public boolean register(RegisterRequest request) {
-        if (accountRepository.existsById(request.getUsername())) return false;
+    public RegisterResponse register(RegisterRequest request) {
+        if (accountRepository.existsById(request.getUsername())) return RegisterResponse.USERNAME_EXISTS;
+        if (accountRepository.existsByEmail(request.getEmail())) return RegisterResponse.EMAIL_EXISTS;
 
         Account account = new Account(
                 request.getUsername(),
@@ -31,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.save(account);
 
-        return true;
+        return RegisterResponse.REGISTERED;
     }
 
     public LoginResponse login(LoginRequest request) {

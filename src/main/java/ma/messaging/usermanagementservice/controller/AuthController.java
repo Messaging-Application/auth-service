@@ -4,6 +4,7 @@ import ma.messaging.usermanagementservice.service.AccountService;
 import ma.messaging.usermanagementservice.user.login.LoginRequest;
 import ma.messaging.usermanagementservice.user.login.LoginResponse;
 import ma.messaging.usermanagementservice.user.register.RegisterRequest;
+import ma.messaging.usermanagementservice.user.register.RegisterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> userRegister(@RequestBody RegisterRequest request) {
-        if (accountService.register(request))
-            return new ResponseEntity<>("success", HttpStatus.OK);
+        RegisterResponse response = accountService.register(request);
 
-        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        if (response.equals(RegisterResponse.USERNAME_EXISTS))
+            return new ResponseEntity<>("Username already exists", HttpStatus.CONFLICT);
+        else if (response.equals(RegisterResponse.EMAIL_EXISTS))
+            return new ResponseEntity<>("Email already exists", HttpStatus.CONFLICT);
+
+        return new ResponseEntity<>("Successful user registration", HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -37,8 +42,8 @@ public class AuthController {
         LoginResponse response = accountService.login(request);
 
         if (response.equals(LoginResponse.NON_EXISTENT_ACCOUNT) || response.equals(LoginResponse.WRONG_CREDENTIALS))
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Failed login: incorrect username and/or password", HttpStatus.FORBIDDEN);
 
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully logged in", HttpStatus.OK);
     }
 }

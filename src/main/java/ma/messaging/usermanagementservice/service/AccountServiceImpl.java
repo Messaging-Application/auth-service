@@ -21,7 +21,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     public RegisterResponse register(RegisterRequest request) {
-        if (accountRepository.existsById(request.getUsername())) return RegisterResponse.USERNAME_EXISTS;
+        if (accountRepository.existsByUsername(request.getUsername())) return RegisterResponse.USERNAME_EXISTS;
         if (accountRepository.existsByEmail(request.getEmail())) return RegisterResponse.EMAIL_EXISTS;
 
         Account account = new Account(
@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public LoginResponse login(LoginRequest request) {
-        Optional<Account> user = accountRepository.findById(request.getUsername());
+        Optional<Account> user = accountRepository.findByUsername(request.getUsername());
 
         if (user.isEmpty()) return LoginResponse.NON_EXISTENT_ACCOUNT;
         else if (!user.get().getPassword().equals(request.getPassword()))

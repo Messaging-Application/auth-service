@@ -1,8 +1,6 @@
 package ma.messaging.usermanagementservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,6 +24,9 @@ public class Account {
     static final int MAX_PASSWORD_SIZE = 100;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     @Size(min = MIN_USERNAME_SIZE, max = MAX_USERNAME_SIZE)
     private String username;
 

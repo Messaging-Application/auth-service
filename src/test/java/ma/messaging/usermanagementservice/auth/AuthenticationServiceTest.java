@@ -1,15 +1,14 @@
-package ma.messaging.usermanagementservice.service;
+package ma.messaging.usermanagementservice.auth;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ma.messaging.usermanagementservice.model.Account;
 import ma.messaging.usermanagementservice.repository.AccountRepository;
-import ma.messaging.usermanagementservice.service.AccountServiceImpl;
-import ma.messaging.usermanagementservice.user.login.LoginRequest;
-import ma.messaging.usermanagementservice.user.login.LoginResponse;
-import ma.messaging.usermanagementservice.user.register.RegisterRequest;
-import ma.messaging.usermanagementservice.user.register.RegisterResponse;
+import ma.messaging.usermanagementservice.auth.login.LoginRequest;
+import ma.messaging.usermanagementservice.auth.login.LoginResponse;
+import ma.messaging.usermanagementservice.auth.register.RegisterRequest;
+import ma.messaging.usermanagementservice.auth.register.RegisterResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,13 +17,13 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-public class AccountServiceTest {
+public class AuthenticationServiceTest {
 
     @Mock
     private AccountRepository accountRepository;
 
     @InjectMocks
-    private AccountServiceImpl accountService;
+    private AuthenticationServiceImpl accountService;
 
     @BeforeEach
     public void setUp() {

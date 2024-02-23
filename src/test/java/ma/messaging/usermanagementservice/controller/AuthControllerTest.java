@@ -1,10 +1,10 @@
 package ma.messaging.usermanagementservice.controller;
 
-import ma.messaging.usermanagementservice.service.AccountService;
-import ma.messaging.usermanagementservice.user.login.LoginRequest;
-import ma.messaging.usermanagementservice.user.login.LoginResponse;
-import ma.messaging.usermanagementservice.user.register.RegisterRequest;
-import ma.messaging.usermanagementservice.user.register.RegisterResponse;
+import ma.messaging.usermanagementservice.auth.AuthenticationService;
+import ma.messaging.usermanagementservice.auth.login.LoginRequest;
+import ma.messaging.usermanagementservice.auth.login.LoginResponse;
+import ma.messaging.usermanagementservice.auth.register.RegisterRequest;
+import ma.messaging.usermanagementservice.auth.register.RegisterResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class AuthControllerTest {
 
     @Mock
-    private AccountService accountService;
+    private AuthenticationService authenticationService;
 
     @InjectMocks
     private AuthController authController;
@@ -41,7 +39,7 @@ public class AuthControllerTest {
                 "John",
                 "Doe",
                 "john.doe@uva.nl");
-        when(accountService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.REGISTERED);
+        when(authenticationService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.REGISTERED);
 
         // Act
         ResponseEntity<String> response = authController.userRegister(mockRequest);
@@ -59,7 +57,7 @@ public class AuthControllerTest {
                 "John",
                 "Doe",
                 "john.doe@uva.nl");
-        when(accountService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.USERNAME_EXISTS);
+        when(authenticationService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.USERNAME_EXISTS);
 
         // Act
         ResponseEntity<String> response = authController.userRegister(mockRequest);
@@ -77,7 +75,7 @@ public class AuthControllerTest {
                 "John",
                 "Doe",
                 "john.doe@uva.nl");
-        when(accountService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.EMAIL_EXISTS);
+        when(authenticationService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.EMAIL_EXISTS);
 
         // Act
         ResponseEntity<String> response = authController.userRegister(mockRequest);
@@ -91,7 +89,7 @@ public class AuthControllerTest {
     public void testUserLogin_Success() {
         // Arrange
         LoginRequest mockRequest = new LoginRequest("john", "john123");
-        when(accountService.login(any(LoginRequest.class))).thenReturn(LoginResponse.LOGGED_IN);
+        when(authenticationService.login(any(LoginRequest.class))).thenReturn(LoginResponse.LOGGED_IN);
 
         // Act
         ResponseEntity<String> response = authController.userLogin(mockRequest);
@@ -105,7 +103,7 @@ public class AuthControllerTest {
     public void testUserLogin_FailureCredentials() {
         // Arrange
         LoginRequest mockRequest = new LoginRequest("john", "john123");
-        when(accountService.login(any(LoginRequest.class))).thenReturn(LoginResponse.WRONG_CREDENTIALS);
+        when(authenticationService.login(any(LoginRequest.class))).thenReturn(LoginResponse.WRONG_CREDENTIALS);
 
         // Act
         ResponseEntity<String> response = authController.userLogin(mockRequest);
@@ -119,7 +117,7 @@ public class AuthControllerTest {
     public void testUserLogin_FailureNonExistentAccount() {
         // Arrange
         LoginRequest mockRequest = new LoginRequest("john", "john123");
-        when(accountService.login(any(LoginRequest.class))).thenReturn(LoginResponse.NON_EXISTENT_ACCOUNT);
+        when(authenticationService.login(any(LoginRequest.class))).thenReturn(LoginResponse.NON_EXISTENT_ACCOUNT);
 
         // Act
         ResponseEntity<String> response = authController.userLogin(mockRequest);

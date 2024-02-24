@@ -1,6 +1,5 @@
-package ma.messaging.usermanagementservice.auth.login;
+package ma.messaging.usermanagementservice.payload.requests;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

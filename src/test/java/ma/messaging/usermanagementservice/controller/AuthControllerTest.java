@@ -1,20 +1,5 @@
 package ma.messaging.usermanagementservice.controller;
 
-import ma.messaging.usermanagementservice.payload.requests.LoginRequest;
-import ma.messaging.usermanagementservice.payload.requests.RegisterRequest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-
 public class AuthControllerTest {
     /*
     @Mock

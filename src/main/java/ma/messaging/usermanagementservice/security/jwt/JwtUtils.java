@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 
 @Component

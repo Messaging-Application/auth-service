@@ -1,6 +1,5 @@
 package ma.messaging.usermanagementservice.repository;
 
-import ma.messaging.usermanagementservice.model.Account;
 import ma.messaging.usermanagementservice.model.ERole;
 import ma.messaging.usermanagementservice.model.Role;
 import org.junit.jupiter.api.Assertions;
@@ -16,16 +15,14 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.HashSet;
 import java.util.Optional;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @Testcontainers
-public class AccountRepositoryTest {
+public class RoleRepositoryTest {
 
     @Container
     public static PostgreSQLContainer<?> postgresqlContainer = new PostgreSQLContainer<>("postgres:latest")
@@ -33,8 +30,9 @@ public class AccountRepositoryTest {
             .withUsername("test")
             .withPassword("test");
     @Autowired
-    private AccountRepository accountRepository;
-    private Account account;
+    private RoleRepository roleRepository;
+    private Role roleUser;
+    private Role roleAdmin;
 
     @DynamicPropertySource
     static void postgresqlProperties(DynamicPropertyRegistry registry) {
@@ -45,41 +43,27 @@ public class AccountRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        account = new Account("username",
-                "password",
-                "firstname",
-                "lastname",
-                "username@gmail.com");
-        account.setRoles(new HashSet<>() {{
-            add(new Role(ERole.ROLE_USER));
-        }});
+        roleUser = new Role(ERole.ROLE_USER);
+        roleAdmin = new Role(ERole.ROLE_ADMIN);
 
-        accountRepository.save(account);
+        roleRepository.save(roleUser);
+        roleRepository.save(roleAdmin);
     }
 
     @Test
-    void testExistsByEmail() {
-        // Test existsByEmail
-        Assertions.assertTrue(accountRepository.existsByEmail(account.getEmail()));
-        Assertions.assertFalse(accountRepository.existsByEmail("notfound@example.com"));
+    void findByNameRoleUser() {
+        Optional<Role> foundRole = roleRepository.findByName(ERole.ROLE_USER);
+
+        Assertions.assertTrue(foundRole.isPresent());
+        assertEquals(foundRole.get().getName(), ERole.ROLE_USER);
     }
 
     @Test
-    void testExistsByUsername() {
-        // Test existsByUsername
-        Assertions.assertTrue(accountRepository.existsByUsername(account.getUsername()));
-        Assertions.assertFalse(accountRepository.existsByUsername("non-user"));
+    void findByNameRoleAdmin() {
+        Optional<Role> foundRole = roleRepository.findByName(ERole.ROLE_ADMIN);
+
+        Assertions.assertTrue(foundRole.isPresent());
+        assertEquals(foundRole.get().getName(), ERole.ROLE_ADMIN);
     }
 
-    @Test
-    void testFindByUsername() {
-        // Test findByUsername
-        Optional<Account> foundAccount = accountRepository.findByUsername(account.getUsername());
-        Assertions.assertTrue(foundAccount.isPresent(), "Account should be found with username testUser");
-        assertEquals(account.getUsername(), foundAccount.get().getUsername(), "The username should match");
-
-        // Test findByUsername for a username that does not exist
-        Optional<Account> notFoundAccount = accountRepository.findByUsername("nonExistingUser");
-        assertFalse("Account should not be found", notFoundAccount.isPresent());
-    }
 }

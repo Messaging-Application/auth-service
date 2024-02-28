@@ -1,114 +1,137 @@
 package ma.messaging.usermanagementservice.controller;
 
+import jakarta.servlet.http.Cookie;
+import org.junit.jupiter.api.*;
+import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AuthControllerTest {
-    /*
-    @Mock
-    private AuthenticationService authenticationService;
+
+    @Autowired
+    private MockMvc mvc;
+
+    @LocalServerPort
+    private int port;
 
     @InjectMocks
     private AuthController authController;
 
+    private String cookie;
+
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        assertThat(mvc).isNotNull();
     }
 
     @Test
-    public void testUserRegister_Success() {
-        // Arrange
-        RegisterRequest mockRequest = new RegisterRequest("john",
-                "john123",
-                "John",
-                "Doe",
-                "john.doe@uva.nl");
-        when(authenticationService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.REGISTERED);
-
-        // Act
-        ResponseEntity<String> response = authController.userRegister(mockRequest);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Successful user registration", response.getBody());
+    @Order(1)
+    void userRegister_Success() throws Exception {
+        // Perform post request and expect status 200 OK
+        mvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john\"," +
+                                "\"password\":\"john12345678\"," +
+                                "\"firstName\":\"John\"," +
+                                "\"lastName\":\"Doe\"," +
+                                "\"email\":\"john@gmail.com\"," +
+                                "\"role\":[\"user\"]}"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void testUserRegister_FailureUsername() {
-        // Arrange
-        RegisterRequest mockRequest = new RegisterRequest("john",
-                "john123",
-                "John",
-                "Doe",
-                "john.doe@uva.nl");
-        when(authenticationService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.USERNAME_EXISTS);
-
-        // Act
-        ResponseEntity<String> response = authController.userRegister(mockRequest);
-
-        // Assert
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        assertEquals("Username already exists", response.getBody());
+    @Order(2)
+    void userRegister_Failure() throws Exception {
+        //Try to register the same username and email
+        mvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john\"," +
+                                "\"password\":\"john12345678\"," +
+                                "\"firstName\":\"John\"," +
+                                "\"lastName\":\"Doe\"," +
+                                "\"email\":\"john@gmail.com\"," +
+                                "\"role\":[\"user\"]}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testUserRegister_FailureEmail() {
-        // Arrange
-        RegisterRequest mockRequest = new RegisterRequest("john",
-                "john123",
-                "John",
-                "Doe",
-                "john.doe@uva.nl");
-        when(authenticationService.register(any(RegisterRequest.class))).thenReturn(RegisterResponse.EMAIL_EXISTS);
-
-        // Act
-        ResponseEntity<String> response = authController.userRegister(mockRequest);
-
-        // Assert
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        assertEquals("Email already exists", response.getBody());
+    @Order(3)
+    void userRegister_FailureUsername() throws Exception {
+        mvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john\"," +
+                                "\"password\":\"password\"," +
+                                "\"firstName\":\"firstname\"," +
+                                "\"lastName\":\"lastname\"," +
+                                "\"email\":\"username@gmail.com\"," +
+                                "\"role\":[\"user\"]}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testUserLogin_Success() {
-        // Arrange
-        LoginRequest mockRequest = new LoginRequest("john", "john123");
-        when(authenticationService.login(any(LoginRequest.class))).thenReturn(LoginResponse.LOGGED_IN);
-
-        // Act
-        ResponseEntity<String> response = authController.userLogin(mockRequest);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Successfully logged in", response.getBody());
+    @Order(4)
+    void userRegister_FailureEmail() throws Exception {
+        mvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"different\"," +
+                                "\"password\":\"password\"," +
+                                "\"firstName\":\"firstname\"," +
+                                "\"lastName\":\"lastname\"," +
+                                "\"email\":\"john@gmail.com\"," +
+                                "\"role\":[\"user\"]}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testUserLogin_FailureCredentials() {
-        // Arrange
-        LoginRequest mockRequest = new LoginRequest("john", "john123");
-        when(authenticationService.login(any(LoginRequest.class))).thenReturn(LoginResponse.WRONG_CREDENTIALS);
+    @Order(5)
+    void userLogin_Success() throws Exception {
+        // Perform post request and expect status 200 OK
+        MvcResult result = mvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john\"," +
+                                "\"password\":\"john12345678\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().exists("Set-Cookie"))
+                .andReturn();
 
-        // Act
-        ResponseEntity<String> response = authController.userLogin(mockRequest);
+        cookie = result.getResponse().getHeader("Set-Cookie");
 
-        // Assert
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        assertEquals("Failed login: incorrect username and/or password", response.getBody());
+        Assertions.assertNotNull(cookie);
     }
 
     @Test
-    public void testUserLogin_FailureNonExistentAccount() {
-        // Arrange
-        LoginRequest mockRequest = new LoginRequest("john", "john123");
-        when(authenticationService.login(any(LoginRequest.class))).thenReturn(LoginResponse.NON_EXISTENT_ACCOUNT);
-
-        // Act
-        ResponseEntity<String> response = authController.userLogin(mockRequest);
-
-        // Assert
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        assertEquals("Failed login: incorrect username and/or password", response.getBody());
+    @Order(6)
+    void userLogin_InvalidCredentials() throws Exception {
+        // Perform post request and expect status 200 OK
+        mvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john\"," +
+                                "\"password\":\"wrong_password\"}"))
+                .andExpect(status().isUnauthorized());
     }
 
-     */
+    @Test
+    @Order(8)
+    void userLogout_Success() throws Exception {
+        // Perform post request and expect status 200 OK
+        mvc.perform(post("/auth/logout")
+                        .cookie(new Cookie("JWT", cookie)))
+                .andExpect(status().isOk());
+    }
+
 }
 

@@ -1,23 +1,27 @@
 package ma.messaging.usermanagementservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
-@Table(name = "account")
+@Table(name = "account",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class Account {
 
     static final int MIN_USERNAME_SIZE = 4;
@@ -26,6 +30,9 @@ public class Account {
     static final int MAX_PASSWORD_SIZE = 100;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     @Size(min = MIN_USERNAME_SIZE, max = MAX_USERNAME_SIZE)
     private String username;
 
@@ -34,23 +41,26 @@ public class Account {
 
     @NotNull
     private String firstName;
+
     @NotNull
     private String lastName;
+
     @NotNull
     @Email
     private String email;
-    private LocalDateTime registrationTime;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "account_role",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
 
     public Account(String username, String password, String firstName, String lastName, String email) {
-        this();
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-    }
-
-    public Account() {
-        registrationTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     }
 }

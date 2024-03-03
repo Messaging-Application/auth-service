@@ -26,12 +26,13 @@ jobs:
           context: .
           push: true
           tags: dasha12678/user-management-service:latest
+          distribution: registry.hub.docker.com
 
 
   test_coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: checkout-code
         uses: actions/checkout@v2
 
       - name: Set up JDK  
@@ -49,7 +50,7 @@ jobs:
           path: target/site/jacoco/index.html
 
       - name: Verify coverage
-        uses: actions/jacoco-report@v1 #?action to parse the coverage report and verify the coverage?
+        uses: madrapps/jacoco-report@v1.6.1 #github action to parse the coverage report and verify the coverage?
         with:
           paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
           token: ${{ secrets.TOKEN }}

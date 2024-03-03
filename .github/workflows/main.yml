@@ -26,7 +26,6 @@ jobs:
           context: .
           push: true
           tags: dasha12678/user-management-service:latest
-          #distribution: registry.hub.docker.com
 
   test_coverage:
     runs-on: ubuntu-latest

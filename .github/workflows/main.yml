@@ -45,6 +45,9 @@ jobs:
           distribution: 'temurin' 
           java-version: 11
 
+      - name: Clean Maven project
+        run: mvn clean
+
       - name: Generate Jacoco Report
         run: mvn jacoco:report
 

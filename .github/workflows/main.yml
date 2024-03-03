@@ -46,7 +46,7 @@ jobs:
           java-version: 11
 
       - name: Clean Maven project
-        run: mvn clean
+        run: mvn clean install
 
       - name: Generate Jacoco Report
         run: mvn jacoco:report

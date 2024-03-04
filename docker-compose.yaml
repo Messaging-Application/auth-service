@@ -11,6 +11,7 @@ services:
     networks:
       - mynetwork
   auth-service:
+    image: auth-service
     container_name: auth-service
     build: .
     ports:

@@ -1,5 +1,5 @@
 # Use an official Maven image with Java 18 as a parent image for the build stage
-FROM maven:3.8.4-openjdk-17 as build
+FROM maven:3.8.5-openjdk-18 as build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -14,7 +14,7 @@ COPY src /app/src
 RUN mvn -f /app/pom.xml clean package
 
 # For the final image, use an OpenJDK 18 runtime
-FROM openjdk:17-jdk-slim
+FROM openjdk:18-jdk-slim
 
 # Copy the jar from the build stage to the final image
 COPY --from=build /app/target/*.jar /usr/local/lib/app.jar

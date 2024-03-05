@@ -1,4 +1,4 @@
-package ma.messaging.usermanagementservice.user.login;
+package ma.messaging.usermanagementservice.payload.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

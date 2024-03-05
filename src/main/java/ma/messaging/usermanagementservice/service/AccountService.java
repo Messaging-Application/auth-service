@@ -1,10 +1,13 @@
 package ma.messaging.usermanagementservice.service;
 
-import ma.messaging.usermanagementservice.user.login.LoginRequest;
-import ma.messaging.usermanagementservice.user.login.LoginResponse;
-import ma.messaging.usermanagementservice.user.register.RegisterRequest;
+import ma.messaging.usermanagementservice.payload.requests.LoginRequest;
+import ma.messaging.usermanagementservice.payload.requests.RegisterRequest;
+import org.springframework.http.ResponseEntity;
 
 public interface AccountService {
-    boolean register(RegisterRequest request);
-    LoginResponse login(LoginRequest request);
+    ResponseEntity<?> userRegister(RegisterRequest request);
+
+    ResponseEntity<?> userLogin(LoginRequest request);
+
+    ResponseEntity<?> userLogout();
 }

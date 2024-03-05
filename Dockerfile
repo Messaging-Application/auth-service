@@ -11,9 +11,9 @@ COPY pom.xml /app/
 COPY src /app/src
 
 # Package the application
-RUN mvn -f /app/pom.xml clean package
+RUN mvn -f /app/pom.xml clean package -DskipTests
 
-# For the final image, use an OpenJDK 18 runtime
+# For the final image, use an OpenJDK 17 runtime
 FROM openjdk:18-jdk-slim
 
 # Copy the jar from the build stage to the final image

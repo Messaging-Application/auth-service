@@ -158,8 +158,8 @@ public class AuthServiceTest {
         String expectedToken = "token";
         ResponseCookie jwtCookie = ResponseCookie.from("ChatApp", expectedToken)
                 .path("/api")
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .build();
         when(jwtUtils.generateJwtCookie(userDetails)).thenReturn(jwtCookie);
 

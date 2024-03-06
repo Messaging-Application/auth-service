@@ -48,7 +48,7 @@ jobs:
         run: mvn clean
 
       - name: Run tests
-        run: mvn maven:test #generte jacoco.exec file 
+        run: mvn test #generte jacoco.exec file 
 
       - name: Generate Jacoco Report
         run: mvn jacoco:report

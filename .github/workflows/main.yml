@@ -60,9 +60,7 @@ jobs:
 
       - name: Create PostgreSQL database and user
         run: |
-          psql -h localhost -U postgres -c "CREATE DATABASE users_db;"
-          psql -h localhost -U postgres -c "CREATE USER admin WITH PASSWORD '123';"
-          psql -h localhost -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE users_db TO admin;"
+            psql -h localhost -U postgres -c "CREATE DATABASE users_db; CREATE USER admin WITH PASSWORD '123'; GRANT ALL PRIVILEGES ON DATABASE users_db TO admin;"
 
       - name: Run Maven tests
         run: mvn test -Dspring.datasource.url=jdbc:postgresql://localhost:5432/users_db -Dspring.datasource.username=admin -Dspring.datasource.password=123

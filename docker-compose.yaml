@@ -21,7 +21,7 @@ services:
     networks:
       - mynetwork
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/users_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://mypostgres:5432/users_db
 networks:
   mynetwork:
     driver: bridge

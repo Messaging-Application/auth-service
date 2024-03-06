@@ -1,4 +1,4 @@
-# Use an official Maven image with Java 17 as a parent image for the build stage
+# Use an official Maven image with Java 18 as a parent image for the build stage
 FROM maven:3.8.4-openjdk-17 as build
 
 # Set the working directory in the container

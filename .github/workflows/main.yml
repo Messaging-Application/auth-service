@@ -61,9 +61,6 @@ jobs:
       - name: Run Maven tests
         run: mvn test -Dspring.datasource.url=jdbc:postgresql://localhost:5432/users_db -Dspring.datasource.username=admin -Dspring.datasource.password=123
 
-      # - name: Run tests
-      #   run: mvn test #generte jacoco.exec file 
-
       - name: Generate Jacoco Report
         run: mvn jacoco:report
 

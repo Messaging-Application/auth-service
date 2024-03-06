@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
                 roles.add(userRole);
             } else {
                 strRoles.forEach(role -> {
-                    if (role.equals("admin")) {
+                    if (role.equals("ROLE_ADMIN")) {
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);

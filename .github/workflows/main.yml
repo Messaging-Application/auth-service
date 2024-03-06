@@ -20,6 +20,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Build and run docker containers
+        run: |
+          docker-compose up -d && \
+            docker ps && sleep 5
+
       - name: Build and push to Docker Hub
         uses: docker/build-push-action@v5.1.0
         with:
@@ -27,13 +32,19 @@ jobs:
           push: true
           tags: dasha12678/user-management-service:latest
 
-      - name: Run docker containers
-        run: |
-          docker-compose up -d && \
-            docker ps && sleep 5
-
   test_coverage:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - name: checkout-code
         uses: actions/checkout@v4.1.1
@@ -42,13 +53,16 @@ jobs:
         uses: actions/setup-java@v4.1.0
         with:
           distribution: 'temurin' 
-          java-version: 18
+          java-version: 17
 
       - name: Clean Maven project
         run: mvn clean
 
-      - name: Run tests
-        run: mvn test #generte jacoco.exec file 
+      - name: Run Maven tests
+        run: mvn test -Dspring.datasource.url=jdbc:postgresql://localhost:5432/users_db -Dspring.datasource.username=admin -Dspring.datasource.password=123
+
+      # - name: Run tests
+      #   run: mvn test #generte jacoco.exec file 
 
       - name: Generate Jacoco Report
         run: mvn jacoco:report

@@ -7,7 +7,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 5173
+  - port: 8080 #port for auth-service 
     protocol: TCP
     name: http
   selector:
@@ -39,5 +39,5 @@ spec:
         name: auth-service
         imagePullPolicy: Always
         ports:
-        - containerPort: 5173
+        - containerPort: 8080 #port for auth-service 
       restartPolicy: Always

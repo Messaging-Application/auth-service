@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: auth-service
+  name: auth-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8080 #port for auth-service 
+    protocol: TCP
+    name: http
+  selector:
+    io.kompose.service: auth-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: auth-service
+  name: auth-service
+spec:
+  selector:
+    matchLabels:
+      io.kompose.service: auth-service
+  replicas: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: auth-service
+    spec:
+      containers:
+      - image: auth-service
+        name: auth-service
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080 #port for auth-service 
+      restartPolicy: Always

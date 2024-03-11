@@ -8,14 +8,22 @@ spec:
   - port: 8080 #port for auth-service 
     protocol: TCP
     name: http
+  selector:
+    app: auth-service
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth-service
 spec:
+  selector:
+    matchLabels:
+      app: auth-service
   replicas: 1
   template:
+    metadata:
+      labels:
+        app: auth-service
     spec:
       containers:
       - image: auth-service

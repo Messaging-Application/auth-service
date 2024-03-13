@@ -1,15 +1,15 @@
-package ma.messaging.usermanagementservice.auth;
+package ma.messaging.authservice.auth;
 
-import ma.messaging.usermanagementservice.model.Account;
-import ma.messaging.usermanagementservice.model.Role;
-import ma.messaging.usermanagementservice.payload.requests.LoginRequest;
-import ma.messaging.usermanagementservice.payload.requests.RegisterRequest;
-import ma.messaging.usermanagementservice.payload.responses.MessageResponse;
-import ma.messaging.usermanagementservice.repository.AccountRepository;
-import ma.messaging.usermanagementservice.repository.RoleRepository;
-import ma.messaging.usermanagementservice.security.jwt.JwtUtils;
-import ma.messaging.usermanagementservice.security.services.UserDetailsImpl;
-import ma.messaging.usermanagementservice.service.AccountServiceImpl;
+import ma.messaging.authservice.model.Account;
+import ma.messaging.authservice.model.Role;
+import ma.messaging.authservice.payload.requests.LoginRequest;
+import ma.messaging.authservice.payload.requests.RegisterRequest;
+import ma.messaging.authservice.payload.responses.MessageResponse;
+import ma.messaging.authservice.repository.AccountRepository;
+import ma.messaging.authservice.repository.RoleRepository;
+import ma.messaging.authservice.security.jwt.JwtUtils;
+import ma.messaging.authservice.security.services.UserDetailsImpl;
+import ma.messaging.authservice.service.AccountServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

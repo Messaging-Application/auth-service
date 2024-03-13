@@ -1,7 +1,7 @@
-package ma.messaging.usermanagementservice.repository;
+package ma.messaging.authservice.repository;
 
-import ma.messaging.usermanagementservice.model.ERole;
-import ma.messaging.usermanagementservice.model.Role;
+import ma.messaging.authservice.model.ERole;
+import ma.messaging.authservice.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

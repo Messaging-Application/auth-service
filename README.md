@@ -1,1 +1,1 @@
-# account-management-service
+# auth-service

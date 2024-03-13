@@ -1,4 +1,4 @@
-package ma.messaging.usermanagementservice.controller;
+package ma.messaging.authservice.controller;
 
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.*;

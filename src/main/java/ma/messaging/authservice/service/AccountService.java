@@ -10,4 +10,6 @@ public interface AccountService {
     ResponseEntity<?> userLogin(LoginRequest request);
 
     ResponseEntity<?> userLogout();
+
+    ResponseEntity<?> validateToken(String token);
 }

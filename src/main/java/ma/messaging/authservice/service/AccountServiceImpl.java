@@ -13,6 +13,7 @@ import ma.messaging.authservice.repository.RoleRepository;
 import ma.messaging.authservice.security.jwt.JwtUtils;
 import ma.messaging.authservice.security.services.UserDetailsImpl;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -112,5 +113,11 @@ public class AccountServiceImpl implements AccountService {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new MessageResponse("See you next time!"));
+    }
+
+    @Override
+    public ResponseEntity<?> validateToken(String token) {
+        return jwtUtils.validateJwtToken(token) ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }

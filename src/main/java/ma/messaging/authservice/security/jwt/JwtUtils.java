@@ -61,11 +61,6 @@ public class JwtUtils {
     }
 
     private Key key() {
-        /*String encodedSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
-        byte[] keyBytes = Base64.getUrlDecoder().decode(encodedSecret.getBytes());
-        return Keys.hmacShaKeyFor(keyBytes);
-
-         */
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 

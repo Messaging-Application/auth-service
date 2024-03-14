@@ -1,4 +1,4 @@
-package ma.messaging.authservice.auth;
+package ma.messaging.authservice.service;
 
 import ma.messaging.authservice.model.Account;
 import ma.messaging.authservice.model.Role;
@@ -9,7 +9,6 @@ import ma.messaging.authservice.repository.AccountRepository;
 import ma.messaging.authservice.repository.RoleRepository;
 import ma.messaging.authservice.security.jwt.JwtUtils;
 import ma.messaging.authservice.security.services.UserDetailsImpl;
-import ma.messaging.authservice.service.AccountServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -5,11 +5,7 @@ import ma.messaging.authservice.payload.requests.LoginRequest;
 import ma.messaging.authservice.payload.requests.RegisterRequest;
 import ma.messaging.authservice.service.AccountService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, allowCredentials = "true")
 @RestController
@@ -35,5 +31,10 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> userLogout() {
         return accountService.userLogout();
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateToken(@CookieValue(name = "${application.security.jwt.cookie-name}", required = true) String jwtToken) {
+        return accountService.validateToken(jwtToken);
     }
 }

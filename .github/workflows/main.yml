@@ -70,7 +70,7 @@ jobs:
         run: mvn clean
 
       - name: Run Maven tests
-        run: mvn test -Dspring.datasource.url=jdbc:postgresql://localhost:5432/users_db -Dspring.datasource.username=admin -Dspring.datasource.password=123
+        run: mvn test
 
       - name: Generate Jacoco Report
         run: mvn jacoco:report

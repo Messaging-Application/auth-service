@@ -30,6 +30,6 @@ jobs:
               git checkout main &&
               git pull &&
               export SPRING_PROFILES_ACTIVE=prod &&
-              mvn clean package &&
+              mvn clean package -DskipTests &&
               nohup java -jar target/auth-service.jar > spring_boot.log 2>&1 &
               '

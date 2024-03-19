@@ -12,6 +12,8 @@ import ma.messaging.authservice.repository.AccountRepository;
 import ma.messaging.authservice.repository.RoleRepository;
 import ma.messaging.authservice.security.jwt.JwtUtils;
 import ma.messaging.authservice.security.services.UserDetailsImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -32,6 +34,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -75,12 +78,14 @@ public class AccountServiceImpl implements AccountService {
                 });
             }
         } catch (RuntimeException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
 
         account.setRoles(roles);
         accountRepository.save(account);
 
+        logger.info(String.format("username=%s registered successfully", request.getUsername()));
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
@@ -98,6 +103,7 @@ public class AccountServiceImpl implements AccountService {
 
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
+        logger.info(String.format("username=%s logged in successfully", request.getUsername()));
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(
                         userDetails.getId(),
@@ -111,6 +117,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public ResponseEntity<?> userLogout() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        logger.info("username=%s logged out successfully");
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new MessageResponse("See you next time!"));
     }

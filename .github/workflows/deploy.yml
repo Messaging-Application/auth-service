@@ -18,7 +18,7 @@ jobs:
       - name: Deploy to EC2
         env:
             PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
-            HOSTNAME: ${{secrets.EC2_HOST}}
+            HOSTNAME: ${{secrets.EC2_HOST_AUTH}}
             USER_NAME: ec2-user
       
         run: |

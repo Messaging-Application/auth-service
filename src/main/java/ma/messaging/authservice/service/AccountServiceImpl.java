@@ -103,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
 
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
-        logger.info(String.format("username=%s logged in successfully", request.getUsername()));
+        logger.info(String.format("username=%s logged in successfully with cookie=%s", request.getUsername(), jwtCookie.toString()));
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(
                         userDetails.getId(),

@@ -26,9 +26,17 @@ spec:
         app: auth-service
     spec:
       containers:
-      - image: auth-service
+      - image: dasha12678/auth-service:latest
         name: auth-service
         imagePullPolicy: Always
         ports:
         - containerPort: 8080 #port for auth-service 
+        env:
+        - name: DB_HOST
+          value: "jdbc:postgresql://${DB_HOST}"
+        - name: DB_USER
+          value: "${DB_USER}"
+        - name: DB_PASSWORD
+          value: "${DB_PASSWORD}"   
       restartPolicy: Always
+    

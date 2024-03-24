@@ -33,10 +33,19 @@ spec:
         - containerPort: 8080 #port for auth-service 
         env:
         - name: DB_HOST
-          value: "jdbc:postgresql://${DB_HOST}"
+          valueFrom:
+            secretKeyRef:
+              name: dbhost
+              key: DB_HOST
         - name: DB_USER
-          value: "${DB_USER}"
+          valueFrom:
+              secretKeyRef:
+                name: dbuser
+                key: DB_USER
         - name: DB_PASSWORD
-          value: "${DB_PASSWORD}"   
+          valueFrom:
+            secretKeyRef:
+              name: dbpassword
+              key: DB_PASSWORD
       restartPolicy: Always
     

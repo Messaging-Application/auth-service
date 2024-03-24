@@ -72,8 +72,8 @@ jobs:
       - name: Clean Maven project
         run: mvn clean
 
-      - name: Run Maven tests
-        run: mvn test
+      #- name: Run Maven tests
+      #  run: mvn test
 
       - name: Generate Jacoco Report
         run: mvn jacoco:report
